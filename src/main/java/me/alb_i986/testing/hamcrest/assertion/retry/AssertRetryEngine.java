@@ -36,9 +36,8 @@ public class AssertRetryEngine {
     public <T> T assertThat(String failureReason, Supplier<T> actualValuesSupplier, Matcher<? super T> matcher) {
         List<T> suppliedValues = new ArrayList<>();
         long startTimeMillis = System.currentTimeMillis();
-        int maxExecutions = retryConfig.getMaxRetryTimes() + 1;
         int i;
-        for (i = 1; i <= maxExecutions; i++) { // i starts from 1
+        for (i = 1; i <= retryConfig.getMaxAttempts(); i++) { // i starts from 1
             if (i > 1) {
                 retryConfig.getWaitStrategy().run(); // wait and then re-try
             }
@@ -50,7 +49,7 @@ public class AssertRetryEngine {
             } catch (Exception | AssertionError e) {
                 if (!retryConfig.isRetryOnException()) {
                     throw new RetryAssertionError(String.format("Assertion failed after %d/%d attempts: " +
-                            "the supplier of actual values failed", i, maxExecutions), e);
+                            "the supplier of actual values failed", i, retryConfig.getMaxAttempts()), e);
                 }
 
                 // TODO configurable type of exception to retry on
@@ -58,7 +57,7 @@ public class AssertRetryEngine {
 //                    throw e;
 //                }
                 LOG.log(Level.INFO, String.format("Supplier of actual values failed (%d/%d). Waiting before trying again: %s.",
-                        i, maxExecutions, retryConfig.getWaitStrategy()), e);
+                        i, retryConfig.getMaxAttempts(), retryConfig.getWaitStrategy()), e);
                 continue;
             }
             try {
@@ -66,7 +65,7 @@ public class AssertRetryEngine {
                 return actual; // assertion PASSED!
             } catch (AssertionError e) {
                 LOG.log(Level.INFO, String.format("Assertion failed (%d/%d). Waiting before trying again: %s. %s",
-                        i, maxExecutions, retryConfig.getWaitStrategy(), e.toString()));
+                        i, retryConfig.getMaxAttempts(), retryConfig.getWaitStrategy(), e.toString()));
             }
         }
 

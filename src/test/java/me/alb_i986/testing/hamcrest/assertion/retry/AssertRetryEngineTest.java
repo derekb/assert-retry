@@ -23,7 +23,7 @@ public class AssertRetryEngineTest {
      * Each test may override if needed.
      */
     private final RetryConfig.Builder baseRetryConfig = RetryConfig.builder()
-            .withMaxRetryTimes(1)
+            .withMaxAttempts(2)
             .withRetryOnException(false)
             .withWaitStrategy(WaitStrategies.sleep(10, TimeUnit.MILLISECONDS));
 
@@ -32,7 +32,7 @@ public class AssertRetryEngineTest {
     @Test
     public void shouldRetryAndEventuallyPassWhenSupplierMatchesWithinMaxRetryTimes() throws Exception {
         AssertRetryEngine retry = new AssertRetryEngine(
-                baseRetryConfig.withMaxRetryTimes(2)
+                baseRetryConfig.withMaxAttempts(3)
                         .build());
 
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
@@ -41,13 +41,13 @@ public class AssertRetryEngineTest {
         retry.assertThat(supplierSpy, eventually(is(3)));
 
         // then
-        verify(supplierSpy, times(retry.getConfig().getMaxRetryTimes() + 1)).get();
+        verify(supplierSpy, times(retry.getConfig().getMaxAttempts())).get();
     }
 
     @Test
     public void shouldNotRetryWhenSupplierMatchesTheFirstTime() throws Exception {
         AssertRetryEngine retry = new AssertRetryEngine(
-                baseRetryConfig.withMaxRetryTimes(2)
+                baseRetryConfig.withMaxAttempts(3)
                         .build());
 
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
@@ -62,7 +62,7 @@ public class AssertRetryEngineTest {
     @Test
     public void shouldRetryAndEventuallyThrowWhenSupplierDoesntMatchWithinMaxRetryTimes() throws Exception {
         AssertRetryEngine retry = new AssertRetryEngine(
-                baseRetryConfig.withMaxRetryTimes(2)
+                baseRetryConfig.withMaxAttempts(3)
                         .build());
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
 
@@ -76,14 +76,14 @@ public class AssertRetryEngineTest {
                     "         1. was <1>\n" +
                     "         2. was <2>\n" +
                     "         3. was <3>"));
-            verify(supplierSpy, times(retry.getConfig().getMaxRetryTimes() + 1)).get();
+            verify(supplierSpy, times(retry.getConfig().getMaxAttempts())).get();
         }
     }
 
     @Test
     public void retryZeroTimes_shouldNotRetryWhenAssertionFailsTheFirstTime() throws Exception {
         AssertRetryEngine retry = new AssertRetryEngine(
-                baseRetryConfig.withMaxRetryTimes(0)
+                baseRetryConfig.withMaxAttempts(1)
                         .build());
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
 
@@ -98,7 +98,7 @@ public class AssertRetryEngineTest {
     @Test
     public void retryZeroTimes_whenAssertionPassesTheFirstTime() throws Exception {
         AssertRetryEngine retry = new AssertRetryEngine(
-                baseRetryConfig.withMaxRetryTimes(0)
+                baseRetryConfig.withMaxAttempts(1)
                         .build());
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
 
@@ -137,7 +137,7 @@ public class AssertRetryEngineTest {
             retry.assertThat(supplierMock, equalTo("WHATEVER"));
             fail("exception was expected");
         } catch (RetryAssertionError expected) {
-            verify(supplierMock, times(retry.getConfig().getMaxRetryTimes() + 1)).get();
+            verify(supplierMock, times(retry.getConfig().getMaxAttempts())).get();
         }
     }
 }

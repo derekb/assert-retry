@@ -17,7 +17,7 @@ public class RetryConfig {
     /**
      * A config with the default values:
      * <ul>
-     *     <li>{@link DefaultValues#MAX_RETRY_TIMES}</li>
+     *     <li>{@link DefaultValues#MAX_ATTEMPTS}</li>
      *     <li>{@link DefaultValues#WAIT_STRATEGY}</li>
      *     <li>{@link DefaultValues#RETRY_ON_EXCEPTION}</li>
      * </ul>
@@ -37,9 +37,9 @@ public class RetryConfig {
         public static final boolean RETRY_ON_EXCEPTION = false;
 
         /**
-         * By default, retry only once (i.e. max 2 executions in total).
+         * By default, retry only once, i.e. max 2 executions in total.
          */
-        public static final int MAX_RETRY_TIMES = 1;
+        public static final int MAX_ATTEMPTS = 2;
 
         private DefaultValues() {}
     }
@@ -54,7 +54,7 @@ public class RetryConfig {
     }
 
     private boolean retryOnException;
-    private int maxRetryTimes;
+    private int maxAttempts;
     private Runnable waitStrategy;
 
     protected RetryConfig() {
@@ -68,12 +68,10 @@ public class RetryConfig {
     }
 
     /**
-     * How many times to retry for.
-     * The max total number of executions is {@code maxRetryTimes + 1}.
+     * How many times to run the assertion for, in case it doesn't pass.
      */
-    // TODO change to getMaxAttempts, as to simplify explanations in javadoc (no more "maxretrytimes + 1" bullsh*t)
-    public int getMaxRetryTimes() {
-        return maxRetryTimes;
+    public int getMaxAttempts() {
+        return maxAttempts;
     }
 
     /**
@@ -98,7 +96,7 @@ public class RetryConfig {
 
         private Runnable waitStrategy;
         private Boolean retryOnException;
-        private Integer maxRetryTimes;
+        private Integer maxAttempts;
 
         /**
          * Access is only allowed to {@link RetryConfig#builder()}.
@@ -128,15 +126,15 @@ public class RetryConfig {
         }
 
         /**
-         * @throws IllegalArgumentException in case of negative arguments
+         * @throws IllegalArgumentException in case of arguments < 1
          *
-         * @see RetryConfig#getMaxRetryTimes()
+         * @see RetryConfig#getMaxAttempts()
          */
-        public Builder withMaxRetryTimes(int maxRetryTimes) {
-            if (maxRetryTimes < 0) {
-                throw new IllegalArgumentException("negative integer");
+        public Builder withMaxAttempts(int maxAttempts) {
+            if (maxAttempts < 1) {
+                throw new IllegalArgumentException("integer < 1");
             }
-            this.maxRetryTimes = maxRetryTimes;
+            this.maxAttempts = maxAttempts;
             return this;
         }
 
@@ -150,7 +148,7 @@ public class RetryConfig {
             RetryConfig retryConfig = new RetryConfig();
             retryConfig.waitStrategy = waitStrategy == null ? DefaultValues.WAIT_STRATEGY : waitStrategy;
             retryConfig.retryOnException = retryOnException == null ? DefaultValues.RETRY_ON_EXCEPTION : retryOnException;
-            retryConfig.maxRetryTimes = maxRetryTimes == null ? DefaultValues.MAX_RETRY_TIMES : maxRetryTimes;
+            retryConfig.maxAttempts = maxAttempts == null ? DefaultValues.MAX_ATTEMPTS : maxAttempts;
             return retryConfig;
         }
     }

@@ -69,7 +69,7 @@ public class AssertRetry extends org.junit.Assert {
      * If not, an {@link AssertionError} is thrown with information about the expected value and
      * <i>all of</i> the actual failing values.
      * <p>The assertion is retried for max {@code n} times, where {@code n} is given by
-     * <code>({@link RetryConfig#getMaxRetryTimes()} + 1)</code>.
+     * {@link RetryConfig#getMaxAttempts()}.
      *
      * <p>Example:
      * <pre>
@@ -85,13 +85,13 @@ public class AssertRetry extends org.junit.Assert {
      * };
      * AssertRetry.assertThat(message.getText(), eventually(containsString("expected content")),
      *         RetryConfig.builder()
-     *             .withMaxRetryTimes(10)
+     *             .withMaxAttempts(10)
      *             .withWaitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS));
      *             .withRetryOnException(true)
      *             .build());
      * </pre>
      * In this example we are asserting that a message with body "expected content" is eventually
-     * published on a JMS queue, within 11 times.
+     * published on a JMS queue, within 10 times.
      *
      * or {@link AssertionError}
      *
@@ -120,7 +120,7 @@ public class AssertRetry extends org.junit.Assert {
      *
      * @return the first actual value returned by the supplier which satisfies the matcher
      *
-     * @throws AssertionError if the assertion fails all the times, i.e. {@link RetryConfig#getMaxRetryTimes()} + 1
+     * @throws AssertionError if the assertion fails all the times, i.e. {@link RetryConfig#getMaxAttempts()}
      */
     public static <T> T assertThat(String failureExplanation, Supplier<T> actualValuesSupplier,
                                    Matcher<? super T> matcher, RetryConfig retryConfig) {
