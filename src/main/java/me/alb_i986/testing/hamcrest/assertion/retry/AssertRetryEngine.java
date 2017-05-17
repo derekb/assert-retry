@@ -37,7 +37,8 @@ public class AssertRetryEngine {
         List<T> suppliedValues = new ArrayList<>();
         long startTimeMillis = System.currentTimeMillis();
         int maxExecutions = retryConfig.getMaxRetryTimes() + 1;
-        for (int i = 1; i <= maxExecutions; i++) { // i starts from 1
+        int i;
+        for (i = 1; i <= maxExecutions; i++) { // i starts from 1
             if (i > 1) {
                 retryConfig.getWaitStrategy().run(); // wait and then re-try
             }
@@ -73,7 +74,7 @@ public class AssertRetryEngine {
 
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         Description description = new StringDescription()
-                .appendText("Assertion failed after " + suppliedValues.size() + " attempts " +
+                .appendText("Assertion failed after " + (i - 1) + " attempts " +
                         //TODO improve display of time (see also WaitStrategies)
                         "(" + TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) + "s): ")
                 .appendText(failureReason.trim())
