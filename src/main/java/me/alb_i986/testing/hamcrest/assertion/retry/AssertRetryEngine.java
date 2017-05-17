@@ -57,8 +57,8 @@ public class AssertRetryEngine {
 //                if (!retryConfig.getRetryException().isAssignableFrom(e.getClass())) {
 //                    throw e;
 //                }
-                LOG.log(Level.INFO, String.format("Assertion failed (%d/%d). Waiting before trying again: %s. %s",
-                        i, maxExecutions, retryConfig.getWaitStrategy(), e.getMessage()));
+                LOG.log(Level.INFO, String.format("Supplier of actual values failed (%d/%d). Waiting before trying again: %s.",
+                        i, maxExecutions, retryConfig.getWaitStrategy()), e);
                 continue;
             }
             try {
@@ -66,7 +66,7 @@ public class AssertRetryEngine {
                 return actual; // assertion PASSED!
             } catch (AssertionError e) {
                 LOG.log(Level.INFO, String.format("Assertion failed (%d/%d). Waiting before trying again: %s. %s",
-                        i, maxExecutions, retryConfig.getWaitStrategy(), e.getMessage()));
+                        i, maxExecutions, retryConfig.getWaitStrategy(), e.toString()));
             }
         }
 
