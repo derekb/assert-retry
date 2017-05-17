@@ -5,8 +5,6 @@ package me.alb_i986.testing.hamcrest.assertion.retry;
  */
 public class RetryAssertionError extends AssertionError {
 
-    // TODO what about RetryAssertionTimeoutError or similar, instead?
-
     public RetryAssertionError(String message) {
         super(message);
     }

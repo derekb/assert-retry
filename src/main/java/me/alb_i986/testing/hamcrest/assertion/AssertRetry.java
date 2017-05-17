@@ -5,6 +5,7 @@ import org.hamcrest.Matcher;
 import java.util.concurrent.TimeUnit;
 
 import me.alb_i986.testing.hamcrest.assertion.retry.AssertRetryEngine;
+import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssertionError;
 import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfig;
 import me.alb_i986.testing.hamcrest.assertion.retry.Supplier;
 import me.alb_i986.testing.hamcrest.assertion.retry.WaitStrategies;
@@ -123,7 +124,11 @@ public class AssertRetry extends org.junit.Assert {
      */
     public static <T> T assertThat(String failureExplanation, Supplier<T> actualValuesSupplier,
                                    Matcher<? super T> matcher, RetryConfig retryConfig) {
-        return new AssertRetryEngine(retryConfig)
-                .assertThat(failureExplanation, actualValuesSupplier, matcher);
+        try {
+            return new AssertRetryEngine(retryConfig)
+                    .assertThat(failureExplanation, actualValuesSupplier, matcher);
+        } catch (RetryAssertionError e) { // re-throw as a plain AssertionError
+            throw new AssertionError(e.getMessage(), e.getCause());
+        }
     }
 }
