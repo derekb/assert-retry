@@ -17,9 +17,14 @@ public class WaitStrategies {
     }
 
     /**
+     * @throws IllegalArgumentException if the integer is negative
+     *
      * @see Thread#sleep(long)
      */
     public static Runnable sleep(long time, TimeUnit timeUnit) {
+        if (time <= 0) {
+            throw new IllegalArgumentException("negative timeout");
+        }
         return sleep(timeUnit.toMillis(time));
     }
 
