@@ -114,13 +114,13 @@ public class AssertRetryEngineTest {
                 baseRetryConfig.withRetryOnException(false)
                         .build());
         given(supplierMock.get())
-                .willThrow(new IllegalArgumentException("simulated"));
+                .willThrow(new IllegalArgumentException("supplier failed"));
 
         try {
             retry.assertThat(supplierMock, equalTo("WHATEVER"));
             fail("exception was expected");
         } catch (RetryAssertionError expectedException) {
-            assertThat(expectedException.getCause().getMessage(), is("simulated"));
+            assertThat(expectedException.getCause().getMessage(), is("supplier failed"));
             verify(supplierMock, times(1)).get();
         }
     }
@@ -131,7 +131,7 @@ public class AssertRetryEngineTest {
                 baseRetryConfig.withRetryOnException(true)
                         .build());
         given(supplierMock.get())
-                .willThrow(new IllegalArgumentException("simulated"));
+                .willThrow(new IllegalArgumentException("supplier failed"));
 
         try {
             retry.assertThat(supplierMock, equalTo("WHATEVER"));
