@@ -77,9 +77,9 @@ public class RetryAssertEngine {
                         //TODO improve display of time (see also WaitStrategies)
                         "(" + TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) + "s): ")
                 .appendText(failureReason.trim())
-                .appendText("\nExpected: ")
+                .appendText("\n    Expected: ")
                 .appendDescriptionOf(matcher)
-                .appendText("\nActual values (in order of appearance):");
+                .appendText("\n    Actual values (in order of appearance):");
         int j = 1;
         for (T failingActualValue : suppliedValues) {
             description.appendText("\n         - ");
