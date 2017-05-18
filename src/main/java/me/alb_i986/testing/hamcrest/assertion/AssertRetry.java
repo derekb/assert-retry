@@ -20,12 +20,9 @@ import me.alb_i986.testing.hamcrest.assertion.retry.WaitStrategies;
  * import me.alb_i986.testing.hamcrest.assertion.AssertRetry.*;
  * </pre>
  *
- * This way, all of the original JUnit's assertion methods will be automatically imported as well,
- * as this class extends {@link org.junit.Assert}.
- *
  * @author Alberto Scotto
  */
-public class AssertRetry extends org.junit.Assert {
+public class AssertRetry {
 
     protected AssertRetry() {
         // static class
