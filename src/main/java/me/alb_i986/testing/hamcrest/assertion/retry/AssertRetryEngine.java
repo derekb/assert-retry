@@ -73,17 +73,17 @@ public class AssertRetryEngine {
 
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         Description description = new StringDescription()
-                .appendText("Assertion failed after " + (i - 1) + " attempts " +
+                .appendText(String.format("Assertion failed after %d/%d attempts ", i - 1, retryConfig.getMaxAttempts()) +
                         //TODO improve display of time (see also WaitStrategies)
                         "(" + TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) + "s): ")
                 .appendText(failureReason.trim())
                 .appendText("\nExpected: ")
                 .appendDescriptionOf(matcher)
-                .appendText("\n     but:");
+                .appendText("\nActual values (in order of appearance):");
         int j = 1;
         for (T failingActualValue : suppliedValues) {
-            description.appendText("\n         " + j + ". ");
-            matcher.describeMismatch(failingActualValue, description);
+            description.appendText("\n         - ");
+            description.appendValue(failingActualValue);
             j++;
         }
         throw new RetryAssertionError(description.toString());

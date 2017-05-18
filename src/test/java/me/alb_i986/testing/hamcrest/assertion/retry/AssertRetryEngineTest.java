@@ -72,10 +72,10 @@ public class AssertRetryEngineTest {
         } catch (RetryAssertionError expectedException) {
             // exception message should include all of the failing values
             assertThat(expectedException.getMessage(), containsString("Expected: eventually is <4>\n" +
-                    "     but:\n" +
-                    "         1. was <1>\n" +
-                    "         2. was <2>\n" +
-                    "         3. was <3>"));
+                    "Actual values (in order of appearance):\n" +
+                    "         - <1>\n" +
+                    "         - <2>\n" +
+                    "         - <3>"));
             verify(supplierSpy, times(retry.getConfig().getMaxAttempts())).get();
         }
     }
