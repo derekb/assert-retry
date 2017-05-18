@@ -4,6 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Factory methods of wait strategies to feed into {@link RetryConfig.Builder#withWaitStrategy(Runnable)}.
+ * <p>
+ * The most common wait strategy is sleep.
+ * More advanced usages may wait for a specific event to occur, e.g. for a message to be published on a queue.
  *
  * <p>Please note: when defining custom strategies, please override {@code toString()} to return
  * a meaningful description of the strategy, e.g. "waiting for a message to be published to the queue myQueue".

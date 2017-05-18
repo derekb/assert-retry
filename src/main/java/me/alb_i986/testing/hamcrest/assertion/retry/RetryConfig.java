@@ -45,9 +45,10 @@ public class RetryConfig {
     }
 
     /**
-     * Gives access to the Builder API, which allows to configure and return an instance of {@link RetryConfig}.
-     *
-     * @see Builder
+     * Gives access to the {@link Builder} API, which allows to configure an instance of {@link RetryConfig}.
+     * <p>
+     * Parameters which have not been set explicitly, will be set to their default value,
+     * as defined in {@link DefaultValues}.
      */
     public static Builder builder() {
         return new Builder();
@@ -84,14 +85,6 @@ public class RetryConfig {
         return waitStrategy;
     }
 
-    /**
-     * Builds immutable instances of {@link RetryConfig}.
-     * <p>
-     * Parameters which have not been set explicitly, will be set to their default value,
-     * as defined in {@link DefaultValues}.
-     *
-     * @see DefaultValues
-     */
     public static class Builder {
 
         private Runnable waitStrategy;
