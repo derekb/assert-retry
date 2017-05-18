@@ -140,4 +140,24 @@ public class AssertRetryEngineTest {
             verify(supplierMock, times(retry.getConfig().getMaxAttempts())).get();
         }
     }
+
+    @Test
+    public void retryOnExceptionIsFalse_whenSupplierThrowsTheSecondTime() throws Exception {
+        AssertRetryEngine retry = new AssertRetryEngine(
+                baseRetryConfig.withRetryOnException(false)
+                        .build());
+        given(supplierMock.get())
+                .willReturn("unexpected string")
+                .willThrow(new IllegalArgumentException("supplier failed"));
+
+        try {
+            retry.assertThat(supplierMock, equalTo("WHATEVER"));
+            fail("exception was expected");
+        } catch (RetryAssertionError expectedException) {
+            assertThat(expectedException.getMessage(), is("Assertion failed after 2/2 attempts: the supplier of actual values failed"));
+            // TODO should also include all of the actual failing values supplied before
+            assertThat(expectedException.getCause().getMessage(), is("supplier failed"));
+            verify(supplierMock, times(2)).get();
+        }
+    }
 }
