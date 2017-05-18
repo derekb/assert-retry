@@ -10,22 +10,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.alb_i986.testing.hamcrest.assertion.AssertRetry;
+import me.alb_i986.testing.hamcrest.assertion.RetryAssert;
 
 /**
- * The core implementation of the {@link AssertRetry} methods.
+ * The core implementation of the {@link RetryAssert} methods.
  * Designed to be easily testable.
  * End users should not depend on this class.
  *
- * @see AssertRetry
+ * @see RetryAssert
  */
-public class AssertRetryEngine {
+public class RetryAssertEngine {
 
-    private static final Logger LOG = Logger.getLogger(AssertRetry.class.getName());
+    private static final Logger LOG = Logger.getLogger(RetryAssert.class.getName());
 
     private final RetryConfig retryConfig;
 
-    public AssertRetryEngine(RetryConfig retryConfig) {
+    public RetryAssertEngine(RetryConfig retryConfig) {
         this.retryConfig = retryConfig;
     }
 

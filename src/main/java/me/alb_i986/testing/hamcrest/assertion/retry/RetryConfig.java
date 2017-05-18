@@ -2,10 +2,10 @@ package me.alb_i986.testing.hamcrest.assertion.retry;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.hamcrest.assertion.AssertRetry;
+import me.alb_i986.testing.hamcrest.assertion.RetryAssert;
 
 /**
- * Configuration for {@link AssertRetry} methods.
+ * Configuration for {@link RetryAssert} methods.
  * <p>
  * Immutable object: use {@link #builder()} to start building an instance;
  * use {@link #DEFAULT_CONFIG} to get an instance pre-configured with the {@link DefaultValues default values}.

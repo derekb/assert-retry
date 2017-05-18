@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.hamcrest.assertion.retry.AssertRetryEngine;
+import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssertEngine;
 import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssertionError;
 import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfig;
 import me.alb_i986.testing.hamcrest.assertion.retry.Supplier;
@@ -17,14 +17,14 @@ import me.alb_i986.testing.hamcrest.assertion.retry.WaitStrategies;
  * It is recommended to star-statically import this class:
  *
  * <pre>
- * import me.alb_i986.testing.hamcrest.assertion.AssertRetry.*;
+ * import me.alb_i986.testing.hamcrest.assertion.RetryAssert.*;
  * </pre>
  *
  * @author Alberto Scotto
  */
-public class AssertRetry {
+public class RetryAssert {
 
-    protected AssertRetry() {
+    protected RetryAssert() {
         // static class
     }
 
@@ -66,11 +66,11 @@ public class AssertRetry {
      * If not, an {@link AssertionError} is thrown with information about the expected value and
      * <i>all of</i> the actual failing values.
      * <p>The assertion is retried for max {@code n} times, where {@code n} is given by
-     * {@link RetryConfig#getMaxAttempts()}.
+     * {@link RetryConfig#getMaxAttempts()}, and can be configured through {@link RetryConfig.Builder#withMaxAttempts(int)}.
      *
-     * <p>Example:
+     * <h3>Example</h3>
      * <pre>
-     * import me.alb_i986.testing.hamcrest.assertion.AssertRetry.*;
+     * import me.alb_i986.testing.hamcrest.assertion.RetryAssert.*;
      *
      * MessageConsumer consumer = session.createConsumer(queue);
      * connection.start();
@@ -80,17 +80,18 @@ public class AssertRetry {
      *       return (TextMessage) consumer.receiveNoWait(); // polling for messages, without blocking
      *    }
      * };
-     * AssertRetry.assertThat(message.getText(), eventually(containsString("expected content")),
+     * RetryAssert.assertThat(message.getText(), eventually(containsString("expected content")),
      *         RetryConfig.builder()
      *             .withMaxAttempts(10)
      *             .withWaitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS));
      *             .withRetryOnException(true)
      *             .build());
      * </pre>
-     * In this example we are asserting that a message with body "expected content" is eventually
-     * published on a JMS queue, within 10 times.
-     *
-     * or {@link AssertionError}
+     * Here we need to verify that a message with body "expected content" is published on a JMS queue.
+     * Given the nature of the system, which is async, we need to employ a bit of tolerance,
+     * therefore we assert that the message will be received within 10 attempts, with 5s wait between
+     * one attempt and the other, which is equivalent to 50s ({@code (10 - 1) * 5s}), excluding the
+     * time it takes the supplier to get the actual value.
      *
      * <h3>Waits</h3>
      * Between one attempt and the other, the system waits as configured in
@@ -122,7 +123,7 @@ public class AssertRetry {
     public static <T> T assertThat(String failureExplanation, Supplier<T> actualValuesSupplier,
                                    Matcher<? super T> matcher, RetryConfig retryConfig) {
         try {
-            return new AssertRetryEngine(retryConfig)
+            return new RetryAssertEngine(retryConfig)
                     .assertThat(failureExplanation, actualValuesSupplier, matcher);
         } catch (RetryAssertionError e) { // re-throw as a plain AssertionError
             throw new AssertionError(e.getMessage(), e.getCause());

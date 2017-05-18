@@ -4,7 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 
-import me.alb_i986.testing.hamcrest.assertion.AssertRetry;
+import me.alb_i986.testing.hamcrest.assertion.RetryAssert;
 import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfig;
 import me.alb_i986.testing.hamcrest.assertion.retry.Supplier;
 
@@ -22,13 +22,13 @@ public class Matchers extends org.hamcrest.Matchers {
 
     /**
      * Syntactic sugar which makes
-     * {@link AssertRetry#assertThat(String, Supplier, Matcher, RetryConfig) retry assertions}
+     * {@link RetryAssert#assertThat(String, Supplier, Matcher, RetryConfig) retry assertions}
      * read better. Example:
      * <pre>
      * assertThat(supplier, eventually(is(greaterThan(2))));
      * </pre>
      *
-     * @see AssertRetry#assertThat(String, Supplier, Matcher, RetryConfig)
+     * @see RetryAssert#assertThat(String, Supplier, Matcher, RetryConfig)
      */
     public static <T> Matcher<T> eventually(final Matcher<T> matcher) {
         return new Is<T>(matcher) {
