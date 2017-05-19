@@ -2,6 +2,7 @@ package me.alb_i986.testing.hamcrest.assertion.retry;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class RetryAssertEngine {
                 continue;
             }
             try {
-                org.junit.Assert.assertThat(actual, matcher);
+                MatcherAssert.assertThat(actual, matcher);
                 return actual; // assertion PASSED!
             } catch (AssertionError e) {
                 LOG.log(Level.INFO, String.format("Assertion failed (%d/%d). Waiting before trying again: %s. %s",

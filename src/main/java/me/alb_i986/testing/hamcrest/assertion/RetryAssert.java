@@ -56,7 +56,7 @@ public class RetryAssert {
     }
 
     /**
-     * Assertion method along the lines of JUnit/Hamcrest's {@link org.junit.Assert#assertThat(String, Object, Matcher)},
+     * Assertion method along the lines of JUnit/Hamcrest's {@link org.hamcrest.MatcherAssert#assertThat(String, Object, Matcher)},
      * featuring a retry mechanism to support assertions <i>with tolerance</i>.
      * <p>
      * Allows to verify that the actual value returned by the {@code supplier} <i>eventually</i>
