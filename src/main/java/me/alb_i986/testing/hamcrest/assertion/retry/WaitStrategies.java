@@ -3,13 +3,13 @@ package me.alb_i986.testing.hamcrest.assertion.retry;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Factory methods of wait strategies to feed into {@link RetryConfig.Builder#withWaitStrategy(Runnable)}.
+ * Factory methods of wait strategies to feed into {@link RetryConfigBuilder#waitStrategy(Runnable)}.
  * <p>
- * The most common wait strategy is sleep.
+ * The most common wait strategy is {@link #sleep(long, TimeUnit)}.
  * More advanced usages may wait for a specific event to occur, e.g. for a message to be published on a queue.
  *
  * <p>Please note: when defining custom strategies, please override {@code toString()} to return
- * a meaningful description of the strategy, e.g. "waiting for a message to be published to the queue myQueue".
+ * a meaningful description of the strategy, e.g. "waiting for a message to be published on the queue myQueue".
  *
  * @author Alberto Scotto
  */
@@ -20,7 +20,9 @@ public class WaitStrategies {
     }
 
     /**
-     * @throws IllegalArgumentException if the integer is negative
+     * Sleep for the given amount of time.
+     *
+     * @throws IllegalArgumentException if the argument is negative
      *
      * @see Thread#sleep(long)
      */

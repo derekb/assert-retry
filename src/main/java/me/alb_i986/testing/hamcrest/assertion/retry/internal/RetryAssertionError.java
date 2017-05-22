@@ -1,4 +1,4 @@
-package me.alb_i986.testing.hamcrest.assertion.retry;
+package me.alb_i986.testing.hamcrest.assertion.retry.internal;
 
 /**
  * Thrown by {@link RetryAssertEngine} when a retry assertion fails.

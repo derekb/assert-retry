@@ -4,7 +4,7 @@ An extension to JUnit/Hamcrest providing assertions with _tolerance_, featuring 
 
 ## Usage
 
-    import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssert;
+    import me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry;
           
     MessageConsumer consumer = session.createConsumer(queue);
     connection.start();

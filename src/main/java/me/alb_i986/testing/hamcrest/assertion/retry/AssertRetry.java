@@ -1,34 +1,40 @@
-package me.alb_i986.testing.hamcrest.assertion;
+package me.alb_i986.testing.hamcrest.assertion.retry;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.core.Is;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssertEngine;
-import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssertionError;
-import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfig;
-import me.alb_i986.testing.hamcrest.assertion.retry.Supplier;
-import me.alb_i986.testing.hamcrest.assertion.retry.WaitStrategies;
+import me.alb_i986.testing.hamcrest.assertion.retry.internal.RetryAssertEngine;
+import me.alb_i986.testing.hamcrest.assertion.retry.internal.RetryAssertionError;
+import me.alb_i986.testing.hamcrest.assertion.retry.internal.RetryConfig;
 
 /**
  * Assertion methods allowing for making assertions <i>with tolerance</i>,
  * i.e. assertions which may fail a few times but <i>eventually</i> pass.
  * Typically useful when testing async systems like message queues.
+ * <p>
+ * It is recommended to star-statically import this class:
+ *
+ * <pre>
+ * import static me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry.*;
+ * </pre>
  *
  * @author Alberto Scotto
  */
-public class RetryAssert {
+public class AssertRetry {
 
-    protected RetryAssert() {
+    protected AssertRetry() {
         // static class
     }
 
     /**
      * Handy overloaded version of the retry assertion method,
-     * implicitly using an empty {@code failureExplanation} and the {@link RetryConfig#DEFAULT_CONFIG}.
+     * implicitly using an empty {@code failureExplanation} and the {@link RetryConfigBuilder.DefaultValues}.
      *
-     * @see #assertThat(String, Supplier, Matcher, RetryConfig)
-     * @see RetryConfig#DEFAULT_CONFIG
+     * @see #assertThat(String, Supplier, Matcher, RetryConfigBuilder)
+     * @see RetryConfigBuilder.DefaultValues
      */
     public static <T> T assertThat(Supplier<T> actualValuesSupplier, Matcher<? super T> matcher) {
         return assertThat("", actualValuesSupplier, matcher);
@@ -36,22 +42,22 @@ public class RetryAssert {
 
     /**
      * Handy overloaded version of the retry assertion method,
-     * implicitly configured with {@link RetryConfig#DEFAULT_CONFIG}.
+     * implicitly configured with {@link RetryConfigBuilder#DEFAULT_CONFIG}.
      *
-     * @see #assertThat(String, Supplier, Matcher, RetryConfig)
-     * @see RetryConfig#DEFAULT_CONFIG
+     * @see #assertThat(String, Supplier, Matcher, RetryConfigBuilder)
+     * @see RetryConfigBuilder.DefaultValues
      */
     public static <T> T assertThat(String failureExplanation, Supplier<T> actualValuesSupplier, Matcher<? super T> matcher) {
-        return assertThat(failureExplanation, actualValuesSupplier, matcher, RetryConfig.DEFAULT_CONFIG);
+        return assertThat(failureExplanation, actualValuesSupplier, matcher, new RetryConfigBuilder());
     }
 
     /**
      * Handy overloaded version of the retry assertion method,
      * implicitly using an empty {@code failureExplanation}.
      *
-     * @see #assertThat(String, Supplier, Matcher, RetryConfig)
+     * @see #assertThat(String, Supplier, Matcher, RetryConfigBuilder)
      */
-    public static <T> T assertThat(Supplier<T> actualValuesSupplier, Matcher<? super T> matcher, RetryConfig retryConfig) {
+    public static <T> T assertThat(Supplier<T> actualValuesSupplier, Matcher<? super T> matcher, RetryConfigBuilder retryConfig) {
         return assertThat("", actualValuesSupplier, matcher, retryConfig);
     }
 
@@ -73,7 +79,7 @@ public class RetryAssert {
      * Given the async nature of the system, we need to employ a bit of tolerance in our assertions.
      *
      * <pre>
-     * import me.alb_i986.testing.hamcrest.assertion.RetryAssert;
+     * import static me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry.*;
      *
      * MessageConsumer consumer = session.createConsumer(queue);
      * connection.start();
@@ -84,12 +90,11 @@ public class RetryAssert {
      *       return m == null ? null : m.getText();
      *    }
      * };
-     * RetryAssert.assertThat(messageText, eventually(containsString("expected content")),
-     *         RetryConfig.builder()
-     *             .withMaxAttempts(10)
-     *             .withWaitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS));
-     *             .withRetryOnException(true)
-     *             .build());
+     * assertThat(messageText, eventually(containsString("expected content")),
+     *         configureRetry()
+     *             .maxAttempts(10)
+     *             .waitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS));
+     *             .retryOnException(true));
      * </pre>
      *
      * The first few lines set up the supplier of actual values, which will be used to poll the message queue
@@ -113,7 +118,7 @@ public class RetryAssert {
      *       - null
      *       - "some other content"
      * </pre>
-     * Please note the use of the matcher {@link me.alb_i986.testing.hamcrest.Matchers#eventually(Matcher)}.
+     * Please note the use of the matcher {@link AssertRetry#eventually(Matcher)}.
      * It's just syntactic sugar which makes the assertion read better: helps the reader see
      * that the assertion employs a retry mechanism.
      * Especially useful with the overloaded versions of the method which do not take a {@link RetryConfig}.
@@ -121,36 +126,63 @@ public class RetryAssert {
      * <h3>Configuration</h3>
      * The retry mechanism can be configured in terms of:
      * <ul>
-     *     <li>how many times to retry the assertion for: {@link RetryConfig.Builder#withMaxAttempts(int)}</li>
-     *     <li>the wait strategy: {@link RetryConfig.Builder#withWaitStrategy(Runnable)}
+     *     <li>how many times to retry the assertion for: {@link RetryConfigBuilder#maxAttempts(int)}</li>
+     *     <li>the wait strategy: {@link RetryConfigBuilder#waitStrategy(Runnable)}
      *     (e.g. {@link WaitStrategies#sleep(long, TimeUnit)})</li>
-     *     <li>whether to retry in case the {@code supplier} throws: {@link RetryConfig.Builder#withRetryOnException(boolean)}</li>
+     *     <li>whether to retry in case the {@code supplier} throws: {@link RetryConfigBuilder#retryOnException(boolean)}</li>
      * </ul>
      *
-     * As shown in the example above, a {@link RetryConfig} can be built by using {@link RetryConfig#builder()},
+     * As shown in the example above, a {@link RetryConfig} can be built by using {@link #configureRetry()},
      * which provides access to the builder API.
+     *
+     * @param <T> the type of the actual values
+     *
+     * @param failureExplanation this string will be included in the exception message in case the assertion fails all the times
      *
      * @param actualValuesSupplier a {@link Runnable} providing the code to get the actual value as many times as needed.
      *                             {@link Supplier#get()} is supposed to re-compute the value from scratch each time.
      * @param matcher an Hamcrest matcher, encapsulating the condition under which the actual value is as expected
-     * @param retryConfig collects all of the parameters configuring the retry mechanism
-     * @param failureExplanation this string will be included in the exception message in case the assertion fails all the times
-     *
-     * @param <T> the type of the actual values
-     *
+     * @param retryConfig the configuration of the retry mechanism
      * @return the first actual value returned by the supplier which satisfies the matcher
      *
      * @throws AssertionError if the assertion fails all the times
      *
-     * @see RetryConfig
+     * @see #configureRetry()
+     * @see #eventually(Matcher)
      */
     public static <T> T assertThat(String failureExplanation, Supplier<T> actualValuesSupplier,
-                                   Matcher<? super T> matcher, RetryConfig retryConfig) {
+                                   Matcher<? super T> matcher, RetryConfigBuilder retryConfig) {
         try {
-            return new RetryAssertEngine(retryConfig)
+            return new RetryAssertEngine(retryConfig.build())
                     .assertThat(failureExplanation, actualValuesSupplier, matcher);
         } catch (RetryAssertionError e) { // re-throw as a plain AssertionError
             throw new AssertionError(e.getMessage(), e.getCause());
         }
+    }
+
+    /**
+     * Syntactic sugar which makes
+     * {@link AssertRetry#assertThat(String, Supplier, Matcher, RetryConfigBuilder) retry assertions}
+     * read better. Example:
+     * <pre>
+     * assertThat(supplier, eventually(is(greaterThan(2))));
+     * </pre>
+     */
+    public static <T> Matcher<T> eventually(final Matcher<T> matcher) {
+        return new Is<T>(matcher) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("eventually ").appendDescriptionOf(matcher);
+            }
+        };
+    }
+
+    /**
+     * Provides access to a fluent DSL for configuring the retry mechanism.
+     *
+     * @see RetryConfigBuilder
+     */
+    public static RetryConfigBuilder configureRetry() {
+        return new RetryConfigBuilder();
     }
 }

@@ -1,4 +1,4 @@
-package me.alb_i986.testing.hamcrest.assertion.retry;
+package me.alb_i986.testing.hamcrest.assertion.retry.internal;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -11,18 +11,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.alb_i986.testing.hamcrest.assertion.RetryAssert;
+import me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry;
+import me.alb_i986.testing.hamcrest.assertion.retry.Supplier;
 
 /**
- * The core implementation of the {@link RetryAssert} methods.
- * Designed to be easily testable.
+ * The core implementation of the {@link AssertRetry} methods.
+ * <p>
+ * Designed for testability.
  * End users should not depend on this class.
  *
- * @see RetryAssert
+ * @see AssertRetry
  */
 public class RetryAssertEngine {
 
-    private static final Logger LOG = Logger.getLogger(RetryAssert.class.getName());
+    private static final Logger LOG = Logger.getLogger(AssertRetry.class.getName());
 
     private final RetryConfig retryConfig;
 
