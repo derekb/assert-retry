@@ -65,6 +65,7 @@ public class RetryAssertEngine {
             }
             try {
                 MatcherAssert.assertThat(actual, matcher);
+                LOG.info("Assertion eventually passed: " + matcher);
                 return actual; // assertion PASSED!
             } catch (AssertionError e) {
                 LOG.log(Level.INFO, String.format("Assertion failed (%d/%d). Waiting before trying again: %s. %s",
