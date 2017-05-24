@@ -15,14 +15,6 @@ import me.alb_i986.testing.assertions.retry.internal.RetryConfig;
  */
 public class RetryConfigBuilder {
 
-    /**
-     * A config with the default values.
-     *
-     * @see DefaultValues
-     */
-    @SuppressWarnings("deprecation")
-    public static final RetryConfig DEFAULT_CONFIG = new RetryConfigBuilder().build();
-
     private Runnable waitStrategy;
     private Boolean retryOnException;
     private Integer maxAttempts;

@@ -7,8 +7,6 @@ import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
  * Holds the configuration parameters for {@link AssertRetry} methods. Immutable object.
  * <p>
  * Use {@link RetryConfigBuilder} to build an instance.
- * Use {@link RetryConfigBuilder#DEFAULT_CONFIG} to get an instance pre-configured
- * with the {@link RetryConfigBuilder.DefaultValues default values}.
  */
 public class RetryConfig {
 
