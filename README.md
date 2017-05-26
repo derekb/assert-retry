@@ -4,16 +4,21 @@ An extension to JUnit/Hamcrest providing assertions with _tolerance_, featuring 
 
 ## Usage
 
-    import static me.alb_i986.testing.hamcrest.Matchers.*;
+    import me.alb_i986.testing.hamcrest.assertion.retry.RetryAssert;
+          
+    MessageConsumer consumer = session.createConsumer(queue);
+    connection.start();
+    Supplier<String> messageText = new Supplier<>() {
+      @Override
+      public String get() throws JMSException {
+         TextMessage m = (TextMessage) consumer.receiveNoWait();  // polling for messages, non blocking
+         return m == null ? null : m.getText();
+      }
+    };
+    RetryAssert.assertThat(messageText, eventually(containsString("expected content")),
+           RetryConfig.builder()
+               .withMaxAttempts(10)
+               .withWaitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS));
+               .withRetryOnException(true)
+               .build());
     
-    [..]
-
-    @Test
-    public void test() {
-        [..]
-        assertThat(actual, customMatches(expected)); // assume customMatches() comes from our me.alb_i986.testing.hamcrest.Matchers
-        assertThat(actualString, contains("blabla")); // contains() comes from the official org.hamcrest.Matchers
-    }
-    
-By importing `me.alb_i986.testing.hamcrest.Matchers`, the matchers defined
-in the official Hamcrest project (`org.hamcrest.Matchers`) are automatically imported as well.
