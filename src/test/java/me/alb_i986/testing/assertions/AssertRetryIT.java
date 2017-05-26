@@ -1,4 +1,4 @@
-package me.alb_i986.testing.hamcrest.assertion.retry;
+package me.alb_i986.testing.assertions;
 
 import org.junit.Test;
 
@@ -6,7 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry.*;
+import me.alb_i986.testing.assertions.retry.Supplier;
+import me.alb_i986.testing.assertions.retry.WaitStrategies;
+
+import static me.alb_i986.testing.assertions.AssertRetry.*;
 import static org.hamcrest.Matchers.*;
 
 public class AssertRetryIT {

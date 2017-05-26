@@ -1,7 +1,7 @@
-package me.alb_i986.testing.hamcrest.assertion.retry.internal;
+package me.alb_i986.testing.assertions.retry.internal;
 
-import me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry;
-import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfigBuilder;
+import me.alb_i986.testing.assertions.AssertRetry;
+import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
 
 /**
  * Holds the configuration parameters for {@link AssertRetry} methods. Immutable object.
@@ -12,9 +12,9 @@ import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfigBuilder;
  */
 public class RetryConfig {
 
-    private boolean retryOnException;
-    private int maxAttempts;
-    private Runnable waitStrategy;
+    private final boolean retryOnException;
+    private final int maxAttempts;
+    private final Runnable waitStrategy;
 
     public RetryConfig(int maxAttempts, Runnable waitStrategy, boolean retryOnException) {
         this.maxAttempts = maxAttempts;

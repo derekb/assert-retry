@@ -1,24 +1,23 @@
-package me.alb_i986.testing.hamcrest.assertion.retry.internal;
+package me.alb_i986.testing.assertions.retry.internal;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry;
-import me.alb_i986.testing.hamcrest.assertion.retry.RetryConfigBuilder;
-import me.alb_i986.testing.hamcrest.assertion.retry.Supplier;
-import me.alb_i986.testing.hamcrest.assertion.retry.Suppliers;
-import me.alb_i986.testing.hamcrest.assertion.retry.WaitStrategies;
+import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
+import me.alb_i986.testing.assertions.retry.Supplier;
+import me.alb_i986.testing.assertions.Suppliers;
+import me.alb_i986.testing.assertions.retry.WaitStrategies;
 
-import static me.alb_i986.testing.hamcrest.assertion.retry.AssertRetry.eventually;
+import static me.alb_i986.testing.assertions.AssertRetry.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class RetryAssertEngineTest {
+public class AssertRetryEngineTest {
 
     // TODO test also logging http://projects.lidalia.org.uk/slf4j-test/
 
@@ -26,7 +25,7 @@ public class RetryAssertEngineTest {
      * A builder pre-loaded with values which should be ok for most of the tests.
      * Each test may override if needed.
      */
-    private final RetryConfigBuilder baseRetryConfig = AssertRetry.configureRetry()
+    private final RetryConfigBuilder baseRetryConfig = configureRetry()
             .maxAttempts(2)
             .retryOnException(false)
             .waitStrategy(WaitStrategies.sleep(10, TimeUnit.MILLISECONDS));
@@ -35,7 +34,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void shouldRetryAndEventuallyPassWhenSupplierMatchesWithinMaxRetryTimes() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.maxAttempts(3)
                         .build());
 
@@ -50,7 +49,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void shouldNotRetryWhenSupplierMatchesTheFirstTime() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.maxAttempts(3)
                         .build());
 
@@ -65,7 +64,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void shouldRetryAndEventuallyThrowWhenSupplierDoesntMatchWithinMaxRetryTimes() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.maxAttempts(3)
                         .build());
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
@@ -86,7 +85,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void retryZeroTimes_shouldNotRetryWhenAssertionFailsTheFirstTime() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.maxAttempts(1)
                         .build());
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
@@ -101,7 +100,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void retryZeroTimes_whenAssertionPassesTheFirstTime() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.maxAttempts(1)
                         .build());
         Supplier<Integer> supplierSpy = Mockito.spy(Suppliers.ascendingIntegersStartingFrom(1));
@@ -114,7 +113,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void retryOnExceptionIsFalse_shouldNotRetryWhenSupplierThrows() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.retryOnException(false)
                         .build());
         given(supplierMock.get())
@@ -131,7 +130,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void retryOnExceptionIsTrue_shouldRetryWhenSupplierThrows() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.retryOnException(true)
                         .build());
         given(supplierMock.get())
@@ -147,7 +146,7 @@ public class RetryAssertEngineTest {
 
     @Test
     public void retryOnExceptionIsFalse_whenSupplierThrowsTheSecondTime() throws Exception {
-        RetryAssertEngine retry = new RetryAssertEngine(
+        AssertRetryEngine retry = new AssertRetryEngine(
                 baseRetryConfig.retryOnException(false)
                         .build());
         given(supplierMock.get())

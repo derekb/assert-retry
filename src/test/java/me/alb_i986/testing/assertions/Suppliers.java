@@ -1,4 +1,6 @@
-package me.alb_i986.testing.hamcrest.assertion.retry;
+package me.alb_i986.testing.assertions;
+
+import me.alb_i986.testing.assertions.retry.Supplier;
 
 public class Suppliers {
 

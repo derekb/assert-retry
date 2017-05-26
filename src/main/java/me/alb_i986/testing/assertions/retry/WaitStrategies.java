@@ -1,4 +1,4 @@
-package me.alb_i986.testing.hamcrest.assertion.retry;
+package me.alb_i986.testing.assertions.retry;
 
 import java.util.concurrent.TimeUnit;
 

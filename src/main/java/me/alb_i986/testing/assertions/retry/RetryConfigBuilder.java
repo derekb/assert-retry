@@ -1,25 +1,26 @@
-package me.alb_i986.testing.hamcrest.assertion.retry;
+package me.alb_i986.testing.assertions.retry;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.hamcrest.assertion.retry.internal.RetryConfig;
+import me.alb_i986.testing.assertions.AssertRetry;
+import me.alb_i986.testing.assertions.retry.internal.RetryConfig;
 
 /**
- * Allows to configure an instance of {@link RetryConfig}.
+ * Provides a fluent DSL allowing to configure the retry mechanism by building
+ * an instance of {@link RetryConfig}.
  * <p>
- * Parameters which have not been set explicitly, will be set to their default value,
+ * For each parameter a setter method is provided.
+ * If a parameter has not been set explicitly, it will be set to its default value
  * as defined in {@link DefaultValues}.
  */
 public class RetryConfigBuilder {
 
     /**
-     * A config with the default values:
-     * <ul>
-     *     <li>{@link DefaultValues#MAX_ATTEMPTS}</li>
-     *     <li>{@link DefaultValues#WAIT_STRATEGY}</li>
-     *     <li>{@link DefaultValues#RETRY_ON_EXCEPTION}</li>
-     * </ul>
+     * A config with the default values.
+     *
+     * @see DefaultValues
      */
+    @SuppressWarnings("deprecation")
     public static final RetryConfig DEFAULT_CONFIG = new RetryConfigBuilder().build();
 
     private Runnable waitStrategy;
@@ -27,9 +28,10 @@ public class RetryConfigBuilder {
     private Integer maxAttempts;
 
     /**
-     * Access for end users is only allowed from {@link AssertRetry#configureRetry()}.
+     * @deprecated end users should rather rely on {@link AssertRetry#configureRetry()}.
      */
-    protected RetryConfigBuilder() {
+    @Deprecated // to give a hint to end users about the correct usage of our API
+    public RetryConfigBuilder() {
     }
 
     /**
@@ -58,21 +60,23 @@ public class RetryConfigBuilder {
     }
 
     /**
-     * How many times to run the assertion for, in case it doesn't pass.
+     * How many times to run the assertion for, in case it fails.
      *
-     * @throws IllegalArgumentException in case of arguments < 1
+     * @throws IllegalArgumentException if maxAttempts is < 1
      */
     public RetryConfigBuilder maxAttempts(int maxAttempts) {
         if (maxAttempts < 1) {
-            throw new IllegalArgumentException("integer < 1");
+            throw new IllegalArgumentException("maxAttempts < 1");
         }
         this.maxAttempts = maxAttempts;
         return this;
     }
 
     /**
-     * Creates and returns an instance, configured according to the previous calls to the
-     * setter methods, setting the parameters to the {@link DefaultValues} if not explicitly set.
+     * Creates and returns an instance of {@link RetryConfig},
+     * configured according to the previous calls to the setter methods.
+     * In case a parameter has not been explicitly set, it will be set to its default value,
+     * as defined in {@link DefaultValues}.
      *
      * @return a configured instance of {@link RetryConfig}
      */
@@ -83,6 +87,14 @@ public class RetryConfigBuilder {
         return new RetryConfig(maxAttempts, waitStrategy, retryOnException);
     }
 
+    /**
+     * Defines the default values:
+     * <ul>
+     *     <li>{@link DefaultValues#MAX_ATTEMPTS}</li>
+     *     <li>{@link DefaultValues#WAIT_STRATEGY}</li>
+     *     <li>{@link DefaultValues#RETRY_ON_EXCEPTION}</li>
+     * </ul>
+     */
     public static class DefaultValues {
 
         /**
