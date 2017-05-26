@@ -95,6 +95,9 @@ public class RetryConfigBuilder {
      * @return a configured instance of {@link RetryConfig}
      */
     public RetryConfig build() {
+
+        //TODO let end users override our default values in a properties file of their own
+
         Runnable waitStrategy = this.waitStrategy == null ? DefaultValues.WAIT_STRATEGY : this.waitStrategy;
         boolean retryOnException = this.retryOnException == null ? DefaultValues.RETRY_ON_EXCEPTION : this.retryOnException;
         int maxAttempts = this.maxAttempts == null ? DefaultValues.MAX_ATTEMPTS : this.maxAttempts;
