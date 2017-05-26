@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
 import me.alb_i986.testing.assertions.retry.Supplier;
 import me.alb_i986.testing.assertions.Suppliers;
-import me.alb_i986.testing.assertions.retry.WaitStrategies;
 
 import static me.alb_i986.testing.assertions.AssertRetry.*;
 import static org.hamcrest.Matchers.*;

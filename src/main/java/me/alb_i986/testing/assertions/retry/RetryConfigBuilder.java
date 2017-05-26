@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import me.alb_i986.testing.assertions.AssertRetry;
 import me.alb_i986.testing.assertions.retry.internal.RetryConfig;
 import me.alb_i986.testing.assertions.retry.internal.Timeout;
+import me.alb_i986.testing.assertions.retry.internal.WaitStrategies;
 
 /**
  * Provides a fluent DSL allowing to configure the retry mechanism by building
@@ -29,13 +30,30 @@ public class RetryConfigBuilder {
     }
 
     /**
-     * Configures the strategy to use to wait between attempts,
-     * e.g. {@link WaitStrategies#sleep(long, TimeUnit) sleep},
-     * or a custom "wait for X to happen".
+     * How long to sleep for before retrying.
      *
-     * @throws IllegalArgumentException in case of null arguments
+     * @throws IllegalArgumentException if time is not positive, or if timeUnit is null
+     */
+    public RetryConfigBuilder sleepBetweenAttempts(long time, TimeUnit timeUnit) {
+        if (time <= 0) {
+            throw new IllegalArgumentException("time must be positive");
+        }
+        if (timeUnit == null) {
+            throw new IllegalArgumentException("timeUnit is null");
+        }
+        return waitStrategy(WaitStrategies.sleep(time, timeUnit));
+    }
+
+    /**
+     * Allows to configure a custom strategy to wait between attempts,
+     * e.g. "wait for the event X to happen".
+     * <p>
+     * Please note: it is recommended to have the custom strategy override {@code toString()}
+     * so that it returns a meaningful description of the strategy,
+     * e.g. "waiting for a message to be published on the queue myQueue".
+     * This will make the logs more meaningful.
      *
-     * @see WaitStrategies
+     * @throws IllegalArgumentException in case of a null argument
      */
     public RetryConfigBuilder waitStrategy(Runnable waitStrategy) {
         if (waitStrategy == null) {

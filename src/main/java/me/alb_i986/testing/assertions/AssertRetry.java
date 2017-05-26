@@ -11,7 +11,6 @@ import me.alb_i986.testing.assertions.retry.internal.RetryAssertionError;
 import me.alb_i986.testing.assertions.retry.internal.RetryConfig;
 import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
 import me.alb_i986.testing.assertions.retry.Supplier;
-import me.alb_i986.testing.assertions.retry.WaitStrategies;
 
 /**
  * Assertion methods allowing for making assertions <i>with tolerance</i>,
@@ -96,7 +95,7 @@ public class AssertRetry {
      * assertThat(messageText, eventually(containsString("expected content")),
      *         configureRetry()
      *             .maxAttempts(10)
-     *             .waitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS))
+     *             .sleepBetweenAttempts(5, TimeUnit.SECONDS)
      *             .retryOnException(true)
      *             .timeoutAfter(60, TimeUnit.SECONDS));
      * </pre>
@@ -129,8 +128,8 @@ public class AssertRetry {
      * The retry mechanism can be configured in terms of:
      * <ul>
      *     <li>how many times to retry the assertion for: {@link RetryConfigBuilder#maxAttempts(int)}</li>
-     *     <li>the wait strategy: {@link RetryConfigBuilder#waitStrategy(Runnable)}
-     *     (e.g. {@link WaitStrategies#sleep(long, TimeUnit)})</li>
+     *     <li>how long to sleep for before retrying: {@link RetryConfigBuilder#sleepBetweenAttempts(long, TimeUnit)}</li>
+     *     <li>or, in alternative, a custom wait strategy: {@link RetryConfigBuilder#waitStrategy(Runnable)}</li>
      *     <li>whether to retry in case the {@code supplier} throws: {@link RetryConfigBuilder#retryOnException(boolean)}</li>
      * </ul>
      *

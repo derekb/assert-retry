@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import me.alb_i986.testing.assertions.retry.Supplier;
-import me.alb_i986.testing.assertions.retry.WaitStrategies;
+import me.alb_i986.testing.assertions.retry.internal.WaitStrategies;
 
 import static me.alb_i986.testing.assertions.AssertRetry.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class AssertRetryIT {
 
@@ -51,6 +52,30 @@ public class AssertRetryIT {
                         .retryOnException(false)
                         .maxAttempts(Integer.MAX_VALUE)
         );
+    }
+
+    @Test
+    public void sleepBetweenAttempts() {
+        Supplier<String> actual = new Supplier<String>() {
+            int i = 0;
+            List<String> actuals = Arrays.asList("a", "b", "c");
+
+            @Override
+            public String get() throws Exception {
+                return actuals.get(i++);
+            }
+        };
+        long startTimeMs = System.currentTimeMillis();
+
+        // when
+        assertThat(actual, eventually(containsString("b")),
+                configureRetry()
+                        .sleepBetweenAttempts(1, TimeUnit.SECONDS)
+                        .maxAttempts(2)
+        );
+
+        long elapsedTimeMs = System.currentTimeMillis() - startTimeMs;
+        assertThat(elapsedTimeMs, allOf(greaterThan(1000L), lessThanOrEqualTo(1300L)));
     }
 
 }
