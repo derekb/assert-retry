@@ -17,7 +17,7 @@ public class AssertRetryIT {
 
     @Test
     public void supplierEventuallyReturnsMatchingValue() {
-        final Supplier<String> actual = new Supplier<String>() {
+        Supplier<String> actual = new Supplier<String>() {
             int i = 0;
             List<String> actuals = Arrays.asList("a", "b", "c");
 
@@ -39,7 +39,7 @@ public class AssertRetryIT {
 
     @Test(expected = AssertionError.class)
     public void retryWithTimeout_supplierNeverMatches() {
-        final Supplier<String> actual = new Supplier<String>() {
+        Supplier<String> actual = new Supplier<String>() {
             @Override
             public String get() throws Exception {
                 return "a";
@@ -49,7 +49,6 @@ public class AssertRetryIT {
                 configureRetry()
                         .timeoutAfter(1, TimeUnit.SECONDS)
                         .waitStrategy(WaitStrategies.sleep(100, TimeUnit.MILLISECONDS))
-                        .retryOnException(false)
                         .maxAttempts(Integer.MAX_VALUE)
         );
     }
