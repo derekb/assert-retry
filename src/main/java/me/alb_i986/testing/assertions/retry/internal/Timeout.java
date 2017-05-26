@@ -15,6 +15,8 @@ public class Timeout {
         restart();
     }
 
+    //TODO allow unit tests to inject a mocked Clock (with Joda time or jdk8)
+
     /**
      * Reset the timeout so that it starts over.
      */
