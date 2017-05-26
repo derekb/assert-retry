@@ -37,11 +37,17 @@ public class AssertRetryEngine {
     }
 
     public <T> T assertThat(String failureReason, Supplier<T> actualValuesSupplier, Matcher<? super T> matcher) {
-        List<T> suppliedValues = new ArrayList<>();
-        long startTimeMillis = System.currentTimeMillis();
         int i;
+        List<T> suppliedValues = new ArrayList<>();
+
+        retryConfig.getTimeout().restart();
+
         for (i = 1; i <= retryConfig.getMaxAttempts(); i++) { // i starts from 1
             if (i > 1) {
+                if (retryConfig.getTimeout().isExpired()) {
+                    failureReason = "Timeout reached. " + failureReason.trim();
+                    break;
+                }
                 retryConfig.getWaitStrategy().run(); // wait and then re-try
             }
 
@@ -75,11 +81,10 @@ public class AssertRetryEngine {
 
         // the assertion never passed => throw
 
-        long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         Description description = new StringDescription()
                 .appendText(String.format("Assertion failed after %d/%d attempts ", i - 1, retryConfig.getMaxAttempts()) +
                         //TODO improve display of time (see also WaitStrategies)
-                        "(" + TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) + "s): ")
+                        "(" + TimeUnit.MILLISECONDS.toSeconds(retryConfig.getTimeout().getElapsedTimeMillis()) + "s): ")
                 .appendText(failureReason.trim())
                 .appendText("\n    Expected: ")
                 .appendDescriptionOf(matcher)

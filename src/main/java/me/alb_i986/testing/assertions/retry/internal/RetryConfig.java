@@ -1,5 +1,7 @@
 package me.alb_i986.testing.assertions.retry.internal;
 
+import java.util.concurrent.TimeUnit;
+
 import me.alb_i986.testing.assertions.AssertRetry;
 import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
 
@@ -13,11 +15,13 @@ public class RetryConfig {
     private final boolean retryOnException;
     private final int maxAttempts;
     private final Runnable waitStrategy;
+    private final Timeout timeout;
 
-    public RetryConfig(int maxAttempts, Runnable waitStrategy, boolean retryOnException) {
+    public RetryConfig(int maxAttempts, Runnable waitStrategy, boolean retryOnException, Timeout timeout) {
         this.maxAttempts = maxAttempts;
         this.waitStrategy = waitStrategy;
         this.retryOnException = retryOnException;
+        this.timeout = timeout;
     }
 
     /**
@@ -41,4 +45,10 @@ public class RetryConfig {
         return waitStrategy;
     }
 
+    /**
+     * @see RetryConfigBuilder#timeoutAfter(long, TimeUnit)
+     */
+    public Timeout getTimeout() {
+        return timeout;
+    }
 }

@@ -96,8 +96,9 @@ public class AssertRetry {
      * assertThat(messageText, eventually(containsString("expected content")),
      *         configureRetry()
      *             .maxAttempts(10)
-     *             .waitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS));
-     *             .retryOnException(true));
+     *             .waitStrategy(WaitStrategies.sleep(5, TimeUnit.SECONDS))
+     *             .retryOnException(true)
+     *             .timeoutAfter(60, TimeUnit.SECONDS));
      * </pre>
      *
      * The first few lines set up the supplier of actual values, which will be used to poll the message queue
@@ -110,9 +111,7 @@ public class AssertRetry {
      * After each failing attempt, it will wait for 5s, and then try again.
      * If {@code consumer.receiveNoWait()} throws a JMSException, the assertion will be re-tried,
      * as if it returned a non-matching value.
-     * Finally, the assertion will timeout after 45s ({@code (10 - 1) * 5s})
-     * (excluding the time it takes for the supplier to get the actual value),
-     * and an AssertionError similar to the following will be thrown:
+     * Finally, the assertion will timeout after 60s, and an AssertionError similar to the following will be thrown:
      * <pre>
      * java.lang.AssertionError: Assertion failed after 10/10 attempts (49s):
      *     Expected: eventually a string containing "expected content"

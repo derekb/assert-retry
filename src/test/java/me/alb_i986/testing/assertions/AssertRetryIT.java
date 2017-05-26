@@ -33,7 +33,23 @@ public class AssertRetryIT {
                         // TODO
 //                        .sleepBetweenAttempts(5, TimeUnit.SECONDS)
 //                        .waitBetweenAttempts(WaitStrategies.sleep(5, TimeUnit.SECONDS))
-//                        .timeoutAfter(10, TimeUnit.SECONDS)
+        );
+    }
+
+    @Test(expected = AssertionError.class)
+    public void retryWithTimeout_supplierNeverMatches() {
+        final Supplier<String> actual = new Supplier<String>() {
+            @Override
+            public String get() throws Exception {
+                return "a";
+            }
+        };
+        assertThat(actual, eventually(containsString("c")),
+                configureRetry()
+                        .timeoutAfter(1, TimeUnit.SECONDS)
+                        .waitStrategy(WaitStrategies.sleep(100, TimeUnit.MILLISECONDS))
+                        .retryOnException(false)
+                        .maxAttempts(Integer.MAX_VALUE)
         );
     }
 
