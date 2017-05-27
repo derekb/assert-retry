@@ -1,6 +1,24 @@
 # Assert Retry
 
-An extension to JUnit/Hamcrest providing assertions with _tolerance_, featuring a __retry__ mechanism.
+An extension to JUnit/Hamcrest providing _assertions with tolerance_, featuring a __retry__ mechanism.
+
+
+## Motivation
+
+AFAIK there are a couple of alternatives out there:
+ 
+- [Awaitility](https://github.com/awaitility/awaitility)
+- [guava-retrying](https://github.com/rholder/guava-retrying)
+
+Awaitility in particular looks pretty good indeed.
+
+The main added value of `assert-retry` is that it's modeled after JUnit/Hamcrest `Assert.assertThat`,
+in terms of signature, and in terms of feeeback to the user in case the assertion fails.
+
+Who loves `Assert.assertThat` may not want to miss `AssertRetry.assertThat`!
+
+Read on for a taste.
+
 
 ## Example of usage
 
@@ -31,7 +49,7 @@ The first few lines set up the supplier of actual values, which will be used to 
 BTW, it is recommended to extract the Supplier variable to a method, in order to help with code reuse.
 
 Then we have our assertion method.
-It reads very much like a JUnit/Hamcrest assertThat assertion.
+As you can see, it reads very much like a JUnit/Hamcrest `assertThat` assertion.
 In this case it's asserting that the expected text message will be received within 10 attempts.
 After each failing attempt, it will wait for 5s, and then try again.
 
@@ -47,5 +65,4 @@ Finally, the assertion will timeout after 60s, and an AssertionError similar to 
              - null
              - "some other content"
 
-For more info, please read the javadoc of AssertRetry#assertThat.
-
+For more info, please check the javadoc of `AssertRetry#assertThat`.
