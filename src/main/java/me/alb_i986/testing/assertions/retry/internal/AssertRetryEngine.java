@@ -83,8 +83,7 @@ public class AssertRetryEngine {
 
         Description description = new StringDescription()
                 .appendText(String.format("Assertion failed after %d/%d attempts ", i - 1, retryConfig.getMaxAttempts()) +
-                        //TODO improve display of time (see also WaitStrategies)
-                        "(" + TimeUnit.MILLISECONDS.toSeconds(retryConfig.getTimeout().getElapsedTimeMillis()) + "s): ")
+                        "(" + TimeUtils.prettyPrint(retryConfig.getTimeout().getElapsedTimeMillis()) + "): ")
                 .appendText(failureReason.trim())
                 .appendText("\n    Expected: ")
                 .appendDescriptionOf(matcher)

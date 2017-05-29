@@ -30,8 +30,7 @@ public class WaitStrategies {
 
             @Override
             public String toString() {
-                //TODO improve display of time: if t>1000ms, we should talk about seconds; if t>60s => minutes, etc.
-                return "sleep for " + millis + "ms";
+                return "sleep for " + TimeUtils.prettyPrint(millis);
             }
         };
     }
