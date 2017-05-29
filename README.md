@@ -13,7 +13,7 @@ AFAIK there are a couple of alternatives out there:
 Awaitility in particular looks pretty good indeed.
 
 The main added value of `assert-retry` is that it's modeled after JUnit/Hamcrest `Assert.assertThat`,
-in terms of signature, and in terms of feeeback to the user in case the assertion fails.
+in terms of signature, and in terms of feedback to the user in case the assertion fails.
 
 Who loves `Assert.assertThat` may not want to miss `AssertRetry.assertThat`!
 
