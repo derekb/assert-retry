@@ -7,7 +7,7 @@ public class Timeout {
     private final long timeout;
     private final TimeUnit timeoutUnit;
 
-    private long startTimeMillis;
+    private long startTimeNanos;
 
     public Timeout(long timeout, TimeUnit timeoutUnit) {
         this.timeout = timeout;
@@ -21,7 +21,7 @@ public class Timeout {
      * Reset the timeout so that it starts over.
      */
     public void restart() {
-        this.startTimeMillis = System.currentTimeMillis();
+        this.startTimeNanos = System.nanoTime();
     }
 
     /**
@@ -32,6 +32,6 @@ public class Timeout {
     }
 
     public long getElapsedTimeMillis() {
-        return System.currentTimeMillis() - startTimeMillis;
+        return TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTimeNanos);
     }
 }
