@@ -1,5 +1,6 @@
-package me.alb_i986.testing.assertions.retry.internal;
+package me.alb_i986.test.asserts.retry.internal;
 
+import me.alb_i986.test.asserts.retry.Supplier;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -7,12 +8,10 @@ import org.hamcrest.StringDescription;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.alb_i986.testing.assertions.AssertRetry;
-import me.alb_i986.testing.assertions.retry.Supplier;
+import me.alb_i986.test.asserts.AssertRetry;
 
 /**
  * The core implementation of the {@link AssertRetry} methods.

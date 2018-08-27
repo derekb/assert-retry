@@ -1,11 +1,11 @@
-package me.alb_i986.testing.assertions.retry;
+package me.alb_i986.test.asserts.retry;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.assertions.AssertRetry;
-import me.alb_i986.testing.assertions.retry.internal.RetryConfig;
-import me.alb_i986.testing.assertions.retry.internal.Timeout;
-import me.alb_i986.testing.assertions.retry.internal.WaitStrategies;
+import me.alb_i986.test.asserts.retry.internal.RetryConfig;
+import me.alb_i986.test.asserts.retry.internal.WaitStrategies;
+import me.alb_i986.test.asserts.AssertRetry;
+import me.alb_i986.test.asserts.retry.internal.Timeout;
 
 /**
  * Provides a fluent DSL allowing to configure the retry mechanism by building

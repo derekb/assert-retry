@@ -1,6 +1,6 @@
-package me.alb_i986.testing.assertions;
+package me.alb_i986.test.asserts;
 
-import me.alb_i986.testing.assertions.retry.Supplier;
+import me.alb_i986.test.asserts.retry.Supplier;
 
 public class Suppliers {
 

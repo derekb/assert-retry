@@ -1,16 +1,16 @@
-package me.alb_i986.testing.assertions;
+package me.alb_i986.test.asserts;
 
+import me.alb_i986.test.asserts.retry.RetryConfigBuilder;
+import me.alb_i986.test.asserts.retry.RetryConfigBuilder.DefaultValues;
+import me.alb_i986.test.asserts.retry.Supplier;
+import me.alb_i986.test.asserts.retry.internal.AssertRetryEngine;
+import me.alb_i986.test.asserts.retry.internal.RetryAssertionError;
+import me.alb_i986.test.asserts.retry.internal.RetryConfig;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 
 import java.util.concurrent.TimeUnit;
-
-import me.alb_i986.testing.assertions.retry.internal.AssertRetryEngine;
-import me.alb_i986.testing.assertions.retry.internal.RetryAssertionError;
-import me.alb_i986.testing.assertions.retry.internal.RetryConfig;
-import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
-import me.alb_i986.testing.assertions.retry.Supplier;
 
 /**
  * Assertion methods allowing for making assertions <i>with tolerance</i>,
@@ -20,7 +20,7 @@ import me.alb_i986.testing.assertions.retry.Supplier;
  * It is recommended to star-statically import this class:
  *
  * <pre>
- * import static me.alb_i986.testing.assertions.AssertRetry.*;
+ * import static me.alb_i986.test.asserts.AssertRetry.*;
  * </pre>
  *
  * @author Alberto Scotto
@@ -33,7 +33,7 @@ public class AssertRetry {
 
     /**
      * Handy overloaded version of the retry assertion method,
-     * implicitly using an empty {@code failureExplanation} and the {@link RetryConfigBuilder.DefaultValues}.
+     * implicitly using an empty {@code failureExplanation} and the {@link DefaultValues}.
      *
      * @see #assertThat(String, Supplier, Matcher, RetryConfigBuilder)
      * @see RetryConfigBuilder.DefaultValues
@@ -81,7 +81,7 @@ public class AssertRetry {
      * Given the async nature of the system, we need to employ a bit of tolerance in our assertions.
      *
      * <pre>
-     * import static me.alb_i986.testing.assertions.AssertRetry.*;
+     * import static me.alb_i986.test.asserts.AssertRetry.*;
      *
      * MessageConsumer consumer = session.createConsumer(queue);
      * connection.start();
@@ -181,11 +181,11 @@ public class AssertRetry {
      * Provides access to a fluent DSL for configuring the retry mechanism.
      * <p>
      * If any one of parameters has not been explicitly set,
-     * the {@link me.alb_i986.testing.assertions.retry.RetryConfigBuilder.DefaultValues default value}
+     * the {@link DefaultValues default value}
      * will be used.
      *
      * @see RetryConfigBuilder
-     * @see me.alb_i986.testing.assertions.retry.RetryConfigBuilder.DefaultValues
+     * @see DefaultValues
      */
     @SuppressWarnings("deprecation")
     public static RetryConfigBuilder configureRetry() {

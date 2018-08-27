@@ -1,4 +1,4 @@
-package me.alb_i986.testing.assertions.retry.internal;
+package me.alb_i986.test.asserts.retry.internal;
 
 /**
  * Thrown by {@link AssertRetryEngine} when a retry assertion fails.

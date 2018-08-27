@@ -1,15 +1,14 @@
-package me.alb_i986.testing.assertions;
+package me.alb_i986.test.asserts;
 
+import me.alb_i986.test.asserts.retry.Supplier;
+import me.alb_i986.test.asserts.retry.internal.WaitStrategies;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.assertions.retry.Supplier;
-import me.alb_i986.testing.assertions.retry.internal.WaitStrategies;
-
-import static me.alb_i986.testing.assertions.AssertRetry.*;
+import static me.alb_i986.test.asserts.AssertRetry.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 

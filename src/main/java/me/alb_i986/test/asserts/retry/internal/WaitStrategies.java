@@ -1,8 +1,8 @@
-package me.alb_i986.testing.assertions.retry.internal;
+package me.alb_i986.test.asserts.retry.internal;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.testing.assertions.retry.RetryConfigBuilder;
+import me.alb_i986.test.asserts.retry.RetryConfigBuilder;
 
 /**
  * Factory methods of wait strategies to be fed into {@link RetryConfigBuilder#waitStrategy(Runnable)}.
