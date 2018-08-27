@@ -95,7 +95,8 @@ public class RetryConfigBuilder {
         if (timeUnit == null) {
             throw new IllegalArgumentException("timeUnit is null");
         }
-        return timeout(new Timeout(time, timeUnit));
+        timeout(new Timeout(time, timeUnit));
+        return this;
     }
 
     protected RetryConfigBuilder timeout(Timeout timeout) {

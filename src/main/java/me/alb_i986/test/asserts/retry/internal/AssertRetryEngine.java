@@ -87,11 +87,9 @@ public class AssertRetryEngine {
                 .appendText("\n    Expected: ")
                 .appendDescriptionOf(matcher)
                 .appendText("\n    Actual values (in order of appearance):");
-        int j = 1;
         for (T failingActualValue : suppliedValues) {
             description.appendText("\n         - ");
             description.appendValue(failingActualValue);
-            j++;
         }
         throw new RetryAssertionError(description.toString());
     }

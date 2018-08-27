@@ -1,7 +1,6 @@
 package me.alb_i986.test.asserts;
 
 import me.alb_i986.test.asserts.retry.Supplier;
-import me.alb_i986.test.asserts.retry.internal.WaitStrategies;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static me.alb_i986.test.asserts.retry.AssertRetry.*;
+import static me.alb_i986.test.asserts.retry.internal.WaitStrategies.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -29,10 +29,10 @@ public class AssertRetryIT {
                 configureRetry()
                         .retryOnException(false)
                         .maxAttempts(3)
-                        .waitStrategy(WaitStrategies.sleep(2, TimeUnit.SECONDS))
+                        .waitStrategy(sleep(2, TimeUnit.SECONDS))
                         // TODO
 //                        .sleepBetweenAttempts(5, TimeUnit.SECONDS)
-//                        .waitBetweenAttempts(WaitStrategies.sleep(5, TimeUnit.SECONDS))
+//                        .waitBetweenAttempts(sleep(5, TimeUnit.SECONDS))
         );
     }
 
@@ -47,7 +47,7 @@ public class AssertRetryIT {
         assertThat(actual, eventually(containsString("c")),
                 configureRetry()
                         .timeoutAfter(1, TimeUnit.SECONDS)
-                        .waitStrategy(WaitStrategies.sleep(100, TimeUnit.MILLISECONDS))
+                        .waitStrategy(sleep(100, TimeUnit.MILLISECONDS))
                         .maxAttempts(Integer.MAX_VALUE)
         );
     }
