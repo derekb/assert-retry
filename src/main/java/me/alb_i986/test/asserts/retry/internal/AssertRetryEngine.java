@@ -47,7 +47,12 @@ public class AssertRetryEngine {
                     failureReason = "Timeout reached. " + failureReason.trim();
                     break;
                 }
-                retryConfig.getWaitStrategy().run(); // wait and then re-try
+                try {
+                    retryConfig.getWaitStrategy().run(); // wait and then re-try
+                } catch (Exception e) {
+                    LOG.log(Level.WARNING, "Wait strategy failed", e);
+                    // swallow
+                }
             }
 
             T actual;
