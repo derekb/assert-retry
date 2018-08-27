@@ -118,8 +118,15 @@ public class RetryConfigBuilder {
 
         Runnable waitStrategy = this.waitStrategy == null ? DefaultValues.WAIT_STRATEGY : this.waitStrategy;
         boolean retryOnException = this.retryOnException == null ? DefaultValues.RETRY_ON_EXCEPTION : this.retryOnException;
-        int maxAttempts = this.maxAttempts == null ? DefaultValues.MAX_ATTEMPTS : this.maxAttempts;
         Timeout timeout = this.timeout == null ? DefaultValues.TIMEOUT : this.timeout;
+
+        int maxAttempts;
+        if (this.maxAttempts == null && this.timeout != null) {
+            maxAttempts = Integer.MAX_VALUE;
+        } else {
+            maxAttempts = DefaultValues.MAX_ATTEMPTS;
+        }
+
         return new RetryConfig(maxAttempts, waitStrategy, retryOnException, timeout);
     }
 

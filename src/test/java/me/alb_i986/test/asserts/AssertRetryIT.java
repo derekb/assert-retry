@@ -76,4 +76,24 @@ public class AssertRetryIT {
         assertThat(elapsedTimeMs, allOf(greaterThan(1000L), lessThanOrEqualTo(1300L)));
     }
 
+
+    @Test
+    public void whenConfiguringTimeoutAndLeavingDefaultMaxAttempts() {
+        long startTimeNano = System.nanoTime();
+
+        // when
+        try {
+            assertThat(Suppliers.ascendingIntegersStartingFrom(0), eventually(is(5)),
+                configureRetry()
+                    .timeoutAfter(4, TimeUnit.SECONDS)
+                    .sleepBetweenAttempts(1, TimeUnit.SECONDS)
+            );
+        } catch (AssertionError e) {
+            // expected
+        }
+
+        long elapsedNano = System.nanoTime() - startTimeNano;
+        assertThat(TimeUnit.NANOSECONDS.toMillis(elapsedNano), allOf(greaterThan(4000L), lessThanOrEqualTo(4300L)));
+    }
+
 }
