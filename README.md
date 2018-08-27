@@ -25,7 +25,7 @@ Read on for a taste.
 Say that we have a JMS queue, and we need to verify that a message with body "expected content" is published on the queue.
 Given the async nature of the system, we need to employ a bit of tolerance in our assertions.
 
-    import static me.alb_i986.test.asserts.AssertRetry.*;
+    import static me.alb_i986.test.asserts.retry.AssertRetry.*;
       
     MessageConsumer consumer = session.createConsumer(queue);
     connection.start();

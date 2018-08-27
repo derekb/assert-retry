@@ -1,8 +1,6 @@
-package me.alb_i986.test.asserts;
+package me.alb_i986.test.asserts.retry;
 
-import me.alb_i986.test.asserts.retry.RetryConfigBuilder;
 import me.alb_i986.test.asserts.retry.RetryConfigBuilder.DefaultValues;
-import me.alb_i986.test.asserts.retry.Supplier;
 import me.alb_i986.test.asserts.retry.internal.AssertRetryEngine;
 import me.alb_i986.test.asserts.retry.internal.RetryAssertionError;
 import me.alb_i986.test.asserts.retry.internal.RetryConfig;
@@ -20,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * It is recommended to star-statically import this class:
  *
  * <pre>
- * import static me.alb_i986.test.asserts.AssertRetry.*;
+ * import static me.alb_i986.test.asserts.retry.AssertRetry.*;
  * </pre>
  *
  * @author Alberto Scotto
@@ -81,7 +79,7 @@ public class AssertRetry {
      * Given the async nature of the system, we need to employ a bit of tolerance in our assertions.
      *
      * <pre>
-     * import static me.alb_i986.test.asserts.AssertRetry.*;
+     * import static me.alb_i986.test.asserts.retry.AssertRetry.*;
      *
      * MessageConsumer consumer = session.createConsumer(queue);
      * connection.start();

@@ -2,7 +2,7 @@ package me.alb_i986.test.asserts.retry.internal;
 
 import java.util.concurrent.TimeUnit;
 
-import me.alb_i986.test.asserts.AssertRetry;
+import me.alb_i986.test.asserts.retry.AssertRetry;
 import me.alb_i986.test.asserts.retry.RetryConfigBuilder;
 
 /**

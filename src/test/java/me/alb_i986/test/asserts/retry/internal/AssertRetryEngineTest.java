@@ -1,6 +1,5 @@
 package me.alb_i986.test.asserts.retry.internal;
 
-import me.alb_i986.test.asserts.AssertRetry;
 import me.alb_i986.test.asserts.Suppliers;
 import me.alb_i986.test.asserts.retry.RetryConfigBuilder;
 import me.alb_i986.test.asserts.retry.Supplier;
@@ -9,7 +8,7 @@ import org.mockito.Mockito;
 
 import java.util.concurrent.TimeUnit;
 
-import static me.alb_i986.test.asserts.AssertRetry.*;
+import static me.alb_i986.test.asserts.retry.AssertRetry.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;

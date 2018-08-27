@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import me.alb_i986.test.asserts.retry.internal.RetryConfig;
 import me.alb_i986.test.asserts.retry.internal.WaitStrategies;
-import me.alb_i986.test.asserts.AssertRetry;
 import me.alb_i986.test.asserts.retry.internal.Timeout;
 
 /**

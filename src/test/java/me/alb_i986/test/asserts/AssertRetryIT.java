@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static me.alb_i986.test.asserts.AssertRetry.*;
+import static me.alb_i986.test.asserts.retry.AssertRetry.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
